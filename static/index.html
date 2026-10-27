@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inkloom AI — Brand Governance & Copy Safeguard</title>
+  <meta name="description" content="Inkloom AI brand-governance web app for real-time compliance review, marketing claim validation, versioned drafts, and reviewer workflows.">
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="navbar">
+    <div class="brand-wrapper">
+      <div class="brand-icon">I</div>
+      <div>
+        <h1 class="brand-title" id="app-title">Inkloom AI</h1>
+        <div class="brand-subtitle">Brand Governance & Copy Safeguard Platform</div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-links" aria-label="Main Navigation">
+      <button class="nav-tab-btn active" id="tab-nav-creator" onclick="switchNavTab('creator')">
+        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+        Drafts & Review
+      </button>
+      <button class="nav-tab-btn" id="tab-nav-reviewer" onclick="switchNavTab('reviewer')">
+        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        Review Queue
+        <span class="badge-status badge-in_review" id="nav-queue-count" style="margin-left: 4px;">0</span>
+      </button>
+      <button class="nav-tab-btn" id="tab-nav-guidelines" onclick="switchNavTab('guidelines')">
+        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+        Guideline Library
+      </button>
+      <button class="nav-tab-btn" id="tab-nav-analytics" onclick="switchNavTab('analytics')">
+        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+        Analytics
+      </button>
+    </nav>
+
+    <!-- One-Click Demo Role Switcher -->
+    <div class="auth-bar">
+      <div class="user-quick-switch" title="Switch demo role instantly">
+        <button class="role-switch-btn creator active" id="btn-login-creator" onclick="switchDemoUser('CREATOR')">
+          Creator
+        </button>
+        <button class="role-switch-btn reviewer" id="btn-login-reviewer" onclick="switchDemoUser('REVIEWER')">
+          Reviewer
+        </button>
+        <button class="role-switch-btn admin" id="btn-login-admin" onclick="switchDemoUser('ADMIN')">
+          Admin
+        </button>
+      </div>
+
+      <div class="active-user-pill" id="active-user-pill">
+        <div class="user-avatar" id="active-avatar" style="background:#4F46E5;">P</div>
+        <span id="active-user-name" style="font-weight:600;">Priya Sharma</span>
+        <span class="badge-status badge-draft" id="active-user-role" style="font-size:0.6rem;">CREATOR</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="main-content">
+
+    <!-- "Try this" Interactive Guide Panel -->
+    <section class="try-guide-card" id="try-guide-panel">
+      <div class="guide-header">
+        <div class="guide-title">
+          <svg width="18" height="18" fill="none" stroke="#6366F1" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          Quick Tour: Experience Inkloom AI in 6 Steps
+          <span class="guide-badge">Interactive Flow</span>
+        </div>
+        <button class="btn-secondary" style="font-size:0.75rem; padding: 0.25rem 0.6rem;" onclick="executeTourStep(1)">
+          Start Step 1
+        </button>
+      </div>
+
+      <div class="guide-steps-grid">
+        <div class="guide-step-item" id="guide-step-1" onclick="executeTourStep(1)">
+          <div class="step-num">Step 1</div>
+          <div class="step-text">Open Demo Draft 1 (Deliberate Issues)</div>
+        </div>
+        <div class="guide-step-item" id="guide-step-2" onclick="executeTourStep(2)">
+          <div class="step-num">Step 2</div>
+          <div class="step-text">Click "Review" to evaluate rules & claims</div>
+        </div>
+        <div class="guide-step-item" id="guide-step-3" onclick="executeTourStep(3)">
+          <div class="step-num">Step 3</div>
+          <div class="step-text">Accept a suggested fix (creates new version)</div>
+        </div>
+        <div class="guide-step-item" id="guide-step-4" onclick="executeTourStep(4)">
+          <div class="step-num">Step 4</div>
+          <div class="step-text">Submit draft for human compliance sign-off</div>
+        </div>
+        <div class="guide-step-item" id="guide-step-5" onclick="executeTourStep(5)">
+          <div class="step-num">Step 5</div>
+          <div class="step-text">Switch to Reviewer & approve in queue</div>
+        </div>
+        <div class="guide-step-item" id="guide-step-6" onclick="executeTourStep(6)">
+          <div class="step-num">Step 6</div>
+          <div class="step-text">View governance analytics & ignored rules</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 1: CREATOR WORKSPACE (Drafts, Findings, Versioning) -->
+    <div id="view-creator" class="workspace-grid">
+      <!-- Left Sidebar: Drafts List -->
+      <aside class="sidebar-panel">
+        <div class="panel-header">
+          <h2 class="panel-title">Copy Drafts</h2>
+          <button class="btn-primary-sm" onclick="openNewDraftModal()">
+            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            New Draft
+          </button>
+        </div>
+
+        <!-- Filter status pills -->
+        <div style="display:flex; gap:0.35rem; flex-wrap:wrap; font-size:0.75rem;">
+          <button class="role-switch-btn active" onclick="filterDrafts('ALL', this)">All</button>
+          <button class="role-switch-btn" onclick="filterDrafts('DRAFT', this)">Drafts</button>
+          <button class="role-switch-btn" onclick="filterDrafts('IN_REVIEW', this)">In Review</button>
+          <button class="role-switch-btn" onclick="filterDrafts('APPROVED', this)">Approved</button>
+        </div>
+
+        <div class="drafts-list" id="drafts-sidebar-list">
+          <!-- Populated by JS -->
+          <div style="padding:1rem; text-align:center; color:var(--text-sub);">Loading drafts...</div>
+        </div>
+      </aside>
+
+      <!-- Right Area: Draft Editor & Review Engine -->
+      <section class="editor-workspace" id="editor-workspace">
+        <!-- Draft Header -->
+        <div class="draft-top-bar">
+          <div class="draft-heading-area">
+            <div>
+              <h2 class="draft-title-display" id="selected-draft-title">Select or create a draft</h2>
+              <div style="display:flex; align-items:center; gap:0.5rem; margin-top:0.25rem;">
+                <span class="badge-status badge-draft" id="selected-draft-status">DRAFT</span>
+                <span class="version-pill" id="selected-draft-version">v1</span>
+                <span style="font-size:0.75rem; color:var(--text-sub);" id="selected-draft-author"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="draft-action-btns">
+            <button class="btn-secondary" id="btn-edit-copy" onclick="openManualEditModal()">
+              <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+              Edit Copy
+            </button>
+            <button class="btn-primary" id="btn-run-review" onclick="rerunReviewOnCurrentDraft()">
+              <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              Review Copy
+            </button>
+            <button class="btn-success" id="btn-submit-review" onclick="openSubmitModal()">
+              <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              Submit for Review
+            </button>
+          </div>
+        </div>
+
+        <!-- Compliance Score Card -->
+        <div class="compliance-meter-card">
+          <div class="meter-info">
+            <span class="meter-label">Brand Compliance Index</span>
+            <span class="meter-status" id="compliance-status-text">Moderate Governance Risk</span>
+          </div>
+          <div class="score-display-group">
+            <div class="progress-track">
+              <div class="progress-fill" id="compliance-progress-bar" style="width: 55%; background: var(--warning);"></div>
+            </div>
+            <div class="score-numeric score-mid" id="compliance-score-val">55%</div>
+          </div>
+        </div>
+
+        <!-- Sub-Tabs: Findings / Version History / Audit Log -->
+        <div class="sub-tabs-bar">
+          <button class="sub-tab-btn active" id="subtab-findings" onclick="switchSubTab('findings')">
+            Automated Findings (<span id="findings-count-badge">0</span>)
+          </button>
+          <button class="sub-tab-btn" id="subtab-history" onclick="switchSubTab('history')">
+            Version History (<span id="versions-count-badge">1</span>)
+          </button>
+          <button class="sub-tab-btn" id="subtab-audit" onclick="switchSubTab('audit')">
+            Audit Trail (<span id="audit-count-badge">0</span>)
+          </button>
+        </div>
+
+        <!-- Tab Content 1: Findings Grid -->
+        <div id="subview-findings" class="content-review-grid">
+          <!-- Left: Annotated Text Viewer with interactive highlight markers -->
+          <div class="text-viewer-card">
+            <div class="section-label">
+              <span>Interactive Draft Preview</span>
+              <span style="font-size:0.7rem; text-transform:none; color:var(--text-sub);">Click highlighted text to view rule findings</span>
+            </div>
+            <div class="annotated-text-container" id="annotated-draft-content">
+              Select a draft on the left to inspect flagged copy issues.
+            </div>
+          </div>
+
+          <!-- Right: Side-by-Side Finding Cards -->
+          <div class="findings-card-panel">
+            <div class="section-label">
+              <span>Identified Issues & Intent Rewrites</span>
+              <span id="findings-summary-pill" style="font-size:0.7rem; color:var(--text-sub);">0 pending</span>
+            </div>
+            <div class="findings-list" id="findings-list-container">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab Content 2: Version History -->
+        <div id="subview-history" style="display:none;">
+          <div class="timeline-list" id="versions-timeline-container">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- Tab Content 3: Audit Trail -->
+        <div id="subview-audit" style="display:none;">
+          <div style="background:var(--bg-card); border-radius:var(--radius-md); padding:1rem; overflow-x:auto;">
+            <table class="audit-table">
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>Actor</th>
+                  <th>Action</th>
+                  <th>Details</th>
+                </tr>
+              </thead>
+              <tbody id="audit-table-body">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+    </div>
+
+    <!-- VIEW 2: REVIEWER QUEUE -->
+    <div id="view-reviewer" style="display:none;">
+      <div style="margin-bottom:1.5rem; display:flex; align-items:center; justify-content:space-between;">
+        <div>
+          <h2 style="font-size:1.4rem; font-weight:700;">Governance Review Queue</h2>
+          <p style="color:var(--text-sub); font-size:0.85rem;">Human-in-the-loop sign-off. AI identifies rule risks, but reviewers retain final publishing authorization.</p>
+        </div>
+        <div style="display:flex; gap:0.5rem;">
+          <button class="role-switch-btn active" onclick="filterReviewQueue('ALL', this)">All Submissions</button>
+          <button class="role-switch-btn" onclick="filterReviewQueue('IN_REVIEW', this)">Pending Review</button>
+          <button class="role-switch-btn" onclick="filterReviewQueue('APPROVED', this)">Approved</button>
+          <button class="role-switch-btn" onclick="filterReviewQueue('CHANGES_REQUESTED', this)">Changes Requested</button>
+        </div>
+      </div>
+
+      <div class="data-table-container">
+        <table class="reviewer-table">
+          <thead>
+            <tr>
+              <th>Draft Title</th>
+              <th>Creator</th>
+              <th>Current Version</th>
+              <th>Compliance Score</th>
+              <th>Status</th>
+              <th>Last Updated</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="reviewer-queue-tbody">
+            <!-- Populated by JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- VIEW 3: GUIDELINE LIBRARY (ADMIN) -->
+    <div id="view-guidelines" style="display:none;">
+      <div style="margin-bottom:1.5rem; display:flex; align-items:center; justify-content:space-between;">
+        <div>
+          <h2 style="font-size:1.4rem; font-weight:700;">Brand Guideline Library</h2>
+          <p style="color:var(--text-sub); font-size:0.85rem;">Manage brand rules, regex claim patterns, mandatory disclaimers, and verified fact repositories.</p>
+        </div>
+        <div style="display:flex; gap:0.75rem;">
+          <button class="btn-primary-sm" onclick="openAddRuleModal()">
+            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            Add Brand Rule
+          </button>
+          <button class="btn-primary-sm" style="background:#059669;" onclick="openAddFactModal()">
+            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            Add Approved Fact
+          </button>
+        </div>
+      </div>
+
+      <div class="sub-tabs-bar" style="margin-bottom: 1.25rem;">
+        <button class="sub-tab-btn active" id="guideline-tab-rules" onclick="switchGuidelineSubTab('rules')">
+          Active Brand Rules (<span id="rules-count-badge">8</span>)
+        </button>
+        <button class="sub-tab-btn" id="guideline-tab-facts" onclick="switchGuidelineSubTab('facts')">
+          Approved Facts Repository (<span id="facts-count-badge">5</span>)
+        </button>
+      </div>
+
+      <!-- Rules Subtab -->
+      <div id="guideline-subview-rules">
+        <div id="brand-rules-list">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Facts Subtab -->
+      <div id="guideline-subview-facts" style="display:none;">
+        <div id="approved-facts-list">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 4: ANALYTICS -->
+    <div id="view-analytics" style="display:none;">
+      <div style="margin-bottom:1.5rem;">
+        <h2 style="font-size:1.4rem; font-weight:700;">Governance & Rule Analytics</h2>
+        <p style="color:var(--text-sub); font-size:0.85rem;">Monitor recurring violation types, rule friction, and identify ambiguous guidelines needing refinement.</p>
+      </div>
+
+      <!-- KPI Grid -->
+      <div class="analytics-grid">
+        <div class="kpi-card">
+          <span class="kpi-label">Total Drafts Managed</span>
+          <span class="kpi-value" id="kpi-total-drafts">0</span>
+          <span class="kpi-sub" id="kpi-sub-drafts">Active in pipeline</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">Avg Compliance Score</span>
+          <span class="kpi-value" id="kpi-avg-score" style="color:var(--warning);">0%</span>
+          <span class="kpi-sub">Across all draft versions</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">Approved & Published</span>
+          <span class="kpi-value" id="kpi-approved-drafts" style="color:var(--success);">0</span>
+          <span class="kpi-sub">Human sign-off complete</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">Fix Adoption Rate</span>
+          <span class="kpi-value" id="kpi-fix-rate" style="color:var(--info);">0%</span>
+          <span class="kpi-sub" id="kpi-sub-fixes">0 accepted / 0 total</span>
+        </div>
+      </div>
+
+      <!-- Analytics Sections Grid -->
+      <div class="analytics-sections-grid">
+        <!-- Recurring Issue Types -->
+        <div class="sidebar-panel">
+          <h3 class="panel-title" style="margin-bottom:0.75rem;">Recurring Brand Violation Categories</h3>
+          <div id="issue-types-bars" style="display:flex; flex-direction:column; gap:0.75rem;">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- Most Triggered Rules -->
+        <div class="sidebar-panel">
+          <h3 class="panel-title" style="margin-bottom:0.75rem;">Most-Triggered Brand Guidelines</h3>
+          <table class="audit-table">
+            <thead>
+              <tr>
+                <th>Rule / Policy Source</th>
+                <th style="text-align:right;">Trigger Count</th>
+              </tr>
+            </thead>
+            <tbody id="triggered-rules-tbody">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Often Ignored Rules (Flag Unclear Guidelines) -->
+      <div class="sidebar-panel" style="margin-top:1.5rem;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0.75rem;">
+          <div>
+            <h3 class="panel-title">Often-Ignored Rules (Guideline Clarity Alerts)</h3>
+            <p style="font-size:0.75rem; color:var(--text-sub);">When creators repeatedly ignore a flagged finding, the underlying brand guideline may be overly strict, confusing, or poorly communicated.</p>
+          </div>
+          <span class="badge-status badge-changes_requested" style="font-size:0.75rem;">Audit Friction Watch</span>
+        </div>
+        <table class="audit-table">
+          <thead>
+            <tr>
+              <th>Guideline / Policy Source</th>
+              <th>Ignored Count</th>
+              <th>Total Triggers</th>
+              <th>Ignore Rate</th>
+              <th>Recommendation</th>
+            </tr>
+          </thead>
+          <tbody id="ignored-rules-tbody">
+            <!-- Populated by JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- MODAL: New Draft -->
+  <div class="modal-overlay" id="modal-new-draft" style="display:none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Create New Copy Draft</h3>
+        <button class="btn-close" onclick="closeModal('modal-new-draft')">&times;</button>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="new-draft-title">Draft Campaign Title</label>
+        <input type="text" class="form-input" id="new-draft-title" placeholder="e.g. Summer Wellness Campaign Email">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="new-draft-content">Marketing Copy / Text</label>
+        <textarea class="form-textarea" id="new-draft-content" rows="6" placeholder="Paste your proposed marketing copy here..."></textarea>
+      </div>
+      <div style="display:flex; justify-content:flex-end; gap:0.5rem;">
+        <button class="btn-secondary" onclick="closeModal('modal-new-draft')">Cancel</button>
+        <button class="btn-primary" onclick="submitNewDraft()">Create & Run Review</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Edit Copy Manually -->
+  <div class="modal-overlay" id="modal-edit-copy" style="display:none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Edit Draft Text</h3>
+        <button class="btn-close" onclick="closeModal('modal-edit-copy')">&times;</button>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="edit-draft-content">Draft Content (Will create new version)</label>
+        <textarea class="form-textarea" id="edit-draft-content" rows="6"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="edit-draft-summary">Change Summary</label>
+        <input type="text" class="form-input" id="edit-draft-summary" placeholder="e.g. Rephrased headline to remove superlatives">
+      </div>
+      <div style="display:flex; justify-content:flex-end; gap:0.5rem;">
+        <button class="btn-secondary" onclick="closeModal('modal-edit-copy')">Cancel</button>
+        <button class="btn-primary" onclick="saveManualCopyEdit()">Save & Create Version</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Submit For Review -->
+  <div class="modal-overlay" id="modal-submit-review" style="display:none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Submit Draft for Review</h3>
+        <button class="btn-close" onclick="closeModal('modal-submit-review')">&times;</button>
+      </div>
+      <p style="font-size:0.85rem; color:var(--text-muted);">
+        Submitting transfers this draft to the brand reviewer queue for human sign-off.
+      </p>
+      <div class="form-group">
+        <label class="form-label" for="submit-note">Note for Reviewer</label>
+        <textarea class="form-textarea" id="submit-note" rows="3" placeholder="Add context on claims or intended audience..."></textarea>
+      </div>
+      <div style="display:flex; justify-content:flex-end; gap:0.5rem;">
+        <button class="btn-secondary" onclick="closeModal('modal-submit-review')">Cancel</button>
+        <button class="btn-success" onclick="confirmSubmitForReview()">Submit Draft</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Reviewer Decision -->
+  <div class="modal-overlay" id="modal-reviewer-decision" style="display:none;">
+    <div class="modal-card" style="max-width:680px;">
+      <div class="modal-header">
+        <h3 class="modal-title" id="reviewer-modal-title">Review Draft</h3>
+        <button class="btn-close" onclick="closeModal('modal-reviewer-decision')">&times;</button>
+      </div>
+      <div style="font-size:0.85rem; color:var(--text-muted); background:rgba(0,0,0,0.2); padding:0.75rem; border-radius:var(--radius-sm); max-height:160px; overflow-y:auto; white-space:pre-wrap;" id="reviewer-modal-content">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="reviewer-comment">Reviewer Feedback / Comments</label>
+        <textarea class="form-textarea" id="reviewer-comment" rows="3" placeholder="Provide governance notes or sign-off rationale..."></textarea>
+      </div>
+      <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.5rem;">
+        <span style="font-size:0.72rem; color:var(--warning);">* Human reviewer approval required to publish.</span>
+        <div style="display:flex; gap:0.5rem;">
+          <button class="btn-secondary" style="border-color:#EF4444; color:#EF4444;" onclick="executeReviewerAction('REJECT')">Reject</button>
+          <button class="btn-secondary" style="border-color:#F59E0B; color:#F59E0B;" onclick="executeReviewerAction('REQUEST_CHANGES')">Request Changes</button>
+          <button class="btn-success" onclick="executeReviewerAction('APPROVE')">Approve Copy</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Custom Inline Edit Finding -->
+  <div class="modal-overlay" id="modal-custom-edit-finding" style="display:none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Custom Finding Edit</h3>
+        <button class="btn-close" onclick="closeModal('modal-custom-edit-finding')">&times;</button>
+      </div>
+      <div style="font-size:0.85rem; color:var(--text-muted);">
+        Original text: <span id="edit-finding-orig" style="color:#F87171; font-weight:600;"></span>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="custom-finding-input">Your Custom Replacement</label>
+        <input type="text" class="form-input" id="custom-finding-input">
+      </div>
+      <div style="display:flex; justify-content:flex-end; gap:0.5rem;">
+        <button class="btn-secondary" onclick="closeModal('modal-custom-edit-finding')">Cancel</button>
+        <button class="btn-primary" onclick="confirmCustomFindingEdit()">Apply & Create Version</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Add Brand Rule -->
+  <div class="modal-overlay" id="modal-add-rule" style="display:none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Add Brand Rule</h3>
+        <button class="btn-close" onclick="closeModal('modal-add-rule')">&times;</button>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Rule Name</label>
+        <input type="text" class="form-input" id="rule-name-input" placeholder="e.g. Banned Term: Cheap">
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;">
+        <div class="form-group">
+          <label class="form-label">Rule Type</label>
+          <select class="form-select" id="rule-type-select">
+            <option value="BANNED_TERM">Banned Term</option>
+            <option value="PREFERRED_TERM">Preferred Term</option>
+            <option value="REGEX_CLAIM">Regex Claim Pattern</option>
+            <option value="MANDATORY_DISCLAIMER">Mandatory Disclaimer</option>
+            <option value="TONE">Tone / Editorial Voice</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Severity</label>
+          <select class="form-select" id="rule-severity-select">
+            <option value="high">High</option>
+            <option value="medium" selected>Medium</option>
+            <option value="low">Low</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Search Word / Pattern</label>
+        <input type="text" class="form-input" id="rule-pattern-input" placeholder="e.g. cheap or \b(cures?|heals?)\b">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Preferred Term / Replacement</label>
+        <input type="text" class="form-input" id="rule-preferred-input" placeholder="e.g. affordable">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Explanation</label>
+        <textarea class="form-textarea" id="rule-explanation-input" rows="2" placeholder="Why is this a violation?"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Source Reference & Version</label>
+        <input type="text" class="form-input" id="rule-source-input" placeholder="e.g. Brand Voice Guide v2.4 (Sec 1.2)">
+      </div>
+      <div style="display:flex; justify-content:flex-end; gap:0.5rem;">
+        <button class="btn-secondary" onclick="closeModal('modal-add-rule')">Cancel</button>
+        <button class="btn-primary" onclick="submitAddBrandRule()">Save Rule</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Add Approved Fact -->
+  <div class="modal-overlay" id="modal-add-fact" style="display:none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Add Approved Brand Fact</h3>
+        <button class="btn-close" onclick="closeModal('modal-add-fact')">&times;</button>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Approved Fact Statement</label>
+        <textarea class="form-textarea" id="fact-text-input" rows="3" placeholder="e.g. Ranked #1 organic tea brand by Consumer Voice in 2025..."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Claim Type</label>
+        <select class="form-select" id="fact-type-select">
+          <option value="SUPERLATIVE">Superlative Claim</option>
+          <option value="METRIC">Audited Metric</option>
+          <option value="CERTIFICATION">Third-Party Certification</option>
+          <option value="PROMOTION">Standard Promotion</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Matching Keywords (comma-separated)</label>
+        <input type="text" class="form-input" id="fact-keywords-input" placeholder="best in india, #1, no. 1">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Source Reference (Report / Ref #)</label>
+        <input type="text" class="form-input" id="fact-source-input" placeholder="e.g. Consumer Voice Audit 2025 Ref #CV-771">
+      </div>
+      <div style="display:flex; justify-content:flex-end; gap:0.5rem;">
+        <button class="btn-secondary" onclick="closeModal('modal-add-fact')">Cancel</button>
+        <button class="btn-primary" style="background:#059669;" onclick="submitAddApprovedFact()">Save Fact</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Application Logic -->
+  <script src="/static/app.js"></script>
+</body>
+</html>
